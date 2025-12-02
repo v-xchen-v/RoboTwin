@@ -2,6 +2,7 @@ xhost +
 
 sudo docker run -it --rm \
 --gpus all \
+--shm-size=8g \
 -e NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics \
 -e DISPLAY=$DISPLAY \
 -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
