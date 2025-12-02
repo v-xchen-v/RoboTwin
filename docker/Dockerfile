@@ -39,7 +39,14 @@ RUN apt-get update && apt-get install -y \
     libxrender1 \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    libegl1-mesa \
+    libgl1-mesa-dri \
+    libglvnd0 \
+    libglvnd-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Create EGL vendor directory for NVIDIA
+RUN mkdir -p /usr/share/glvnd/egl_vendor.d
 
 # Install Miniforge (conda-forge based, no ToS required)
 RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh && \
@@ -81,6 +88,13 @@ RUN rm -rf /workspace/RoboTwin/*
 ENV CONDA_DEFAULT_ENV=RoboTwin
 
 WORKDIR /workspace
+
+# Copy and setup entrypoint script to activate conda environment
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/bash"]
 
 # Build command:
 #   docker build -t robotwin:latest -f docker/Dockerfile .
