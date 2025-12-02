@@ -69,6 +69,9 @@ WORKDIR /workspace
 RUN git clone https://github.com/RoboTwin-Platform/RoboTwin.git
 WORKDIR /workspace/RoboTwin
 
+# Activate conda environment for subsequent commands
+SHELL ["conda", "run", "-n", "RoboTwin", "/bin/bash", "-c"]
+
 # Install RoboTwin dependencies and CuRobo
 RUN bash script/_install.sh || true
 
